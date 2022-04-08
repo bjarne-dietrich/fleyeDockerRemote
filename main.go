@@ -8,7 +8,6 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"os"
@@ -28,19 +27,19 @@ func stopContainers(cli *client.Client, ctx context.Context, imageName string) {
 
 	for _, container := range containers {
 		if imageName == container.Image {
-			log.Printf("Found Container: %s with ID: %s", container.Image, container.ID)
-			log.Println(container.Status)
+			fmt.Printf("Found Container: %s with ID: %s", container.Image, container.ID)
+			fmt.Println(container.Status)
 			if !strings.Contains(container.Status, "Exited") {
-				log.Print("Stopping container ", container.ID[:10], "... ")
+				fmt.Print("Stopping container ", container.ID[:10], "... ")
 				if err := cli.ContainerStop(ctx, container.ID, nil); err != nil {
 					panic(err)
 				}
-				log.Println("Success")
+				fmt.Println("Success")
 			}
 			if err := cli.ContainerRemove(ctx, container.ID, types.ContainerRemoveOptions{}); err != nil {
 				panic(err)
 			}
-			log.Printf("Deleted %s\n", container.ID)
+			fmt.Printf("Deleted %s\n", container.ID)
 
 		}
 	}
