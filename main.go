@@ -90,13 +90,29 @@ func deployRTSPContainer(cli *client.Client, ctx context.Context, hostIP string)
 	defer out.Close()
 	io.Copy(os.Stdout, out)
 
+	portMap := createRTSPPortMap(hostIP)
+	p1 := portMap["8000/tcp"][0]
+	p2 := portMap["8001/tcp"][0]
+	p3 := portMap["8554/tcp"][0]
+	fmt.Println(p1.HostPort, p2.HostPort, p3.HostPort)
+
+	portSet := nat.PortSet{
+		"8000/tcp": struct{}{},
+		"8001/tcp": struct{}{},
+		"8554/tcp": struct{}{},
+	}
+
+	fmt.Println(portSet)
 	resp, err := cli.ContainerCreate(ctx,
 		&container.Config{
-			Image: "aler9/rtsp-simple-server",
+			Image:        "aler9/rtsp-simple-server",
+			Env:          []string{"RTSP_PROTOCOLS=tcp"},
+			ExposedPorts: portSet,
 		},
 		&container.HostConfig{
-			PortBindings: createRTSPPortMap(hostIP),
-		}, nil, nil, "")
+			PortBindings: portMap,
+		},
+		nil, nil, "")
 	if err != nil {
 		panic(err)
 	}
