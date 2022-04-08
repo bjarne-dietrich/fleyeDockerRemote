@@ -114,7 +114,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	hostIP := "192.168.221.6"
+	hostIP := "192.168.221.4"
 	stopContainers(cli, ctx, imageName)
 	fmt.Println("Starting Service.")
 	for i := 0; i < 5; i++ {
