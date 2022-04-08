@@ -117,7 +117,8 @@ func main() {
 	stopContainers(cli, ctx, imageName)
 	fmt.Println("Starting Service.")
 	for i := 0; i < 5; i++ {
-		go deployRTSPContainer(cli, ctx, hostIP)
+		resp := deployRTSPContainer(cli, ctx, hostIP)
+		fmt.Println(resp.ID)
 	}
 
 	time.Sleep(2 * time.Second)
