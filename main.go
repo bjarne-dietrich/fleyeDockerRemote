@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 func defaultServer(w http.ResponseWriter, r *http.Request) {
@@ -91,10 +90,6 @@ func deployRTSPContainer(cli *client.Client, ctx context.Context, hostIP string)
 	io.Copy(os.Stdout, out)
 
 	portMap := createRTSPPortMap(hostIP)
-	p1 := portMap["8000/tcp"][0]
-	p2 := portMap["8001/tcp"][0]
-	p3 := portMap["8554/tcp"][0]
-	fmt.Println(p1.HostPort, p2.HostPort, p3.HostPort)
 
 	portSet := nat.PortSet{
 		"8000/tcp": struct{}{},
@@ -139,5 +134,4 @@ func main() {
 		fmt.Println(resp.ID)
 	}
 
-	time.Sleep(3600 * time.Second)
 }
