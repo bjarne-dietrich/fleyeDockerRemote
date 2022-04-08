@@ -77,6 +77,8 @@ func getNewPort() string {
 	}
 	listener.Close()
 
+	fmt.Printf("%d", listener.Addr().(*net.TCPAddr).Port)
+
 	return fmt.Sprintf("%d", listener.Addr().(*net.TCPAddr).Port)
 }
 
